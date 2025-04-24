@@ -22,7 +22,7 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
   const slideRef = useRef<HTMLLIElement>(null);
   const xRef = useRef(0);
   const yRef = useRef(0);
-  const frameRef = useRef<number>();
+  const frameRef = useRef<number | null>(null); // ✅ Fixed
 
   useEffect(() => {
     const animate = () => {
@@ -102,7 +102,10 @@ export function Carousel({ slides }: CarouselProps) {
       aria-labelledby={`carousel-heading-${id}`}
       style={{ width: slides[0].width, height: slides[0].height }}
     >
-      <ul className="flex transition-transform duration-700 ease-in-out" style={{ transform: `translateX(-${current * (slides[0].width + 32)}px)` }}>
+      <ul
+        className="flex transition-transform duration-700 ease-in-out"
+        style={{ transform: `translateX(-${current * (slides[0].width + 32)}px)` }}
+      >
         {slides.map((slide, index) => (
           <Slide
             key={index}
