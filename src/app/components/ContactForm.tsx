@@ -2,7 +2,7 @@
 
 import { Input } from "@/app/components/ui/input";
 import { Label } from "@/app/components/ui/label";
-import { cn } from "@/app/lib/utils";
+// import { cn } from "@/app/lib/utils";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -32,8 +32,8 @@ export default function ContactForm() {
       } else {
         toast.error("Failed to send email");
       }
-    } catch (error) {
-      toast.error("Something went wrong");
+    // } catch (error) {
+    //   toast.error("Something went wrong");
     } finally {
       setLoading(false);
     }
