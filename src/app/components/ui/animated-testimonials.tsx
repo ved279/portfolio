@@ -1,8 +1,8 @@
 "use client";
 
 import { IconArrowLeft, IconArrowRight } from "@tabler/icons-react";
-import { motion, AnimatePresence } from "framer-motion"; // use `framer-motion` instead of `motion/react`
-import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 
 type Testimonial = {
@@ -12,31 +12,38 @@ type Testimonial = {
   src: string;
 };
 
+interface AnimatedTestimonialsProps {
+  testimonials: Testimonial[];
+  autoplay?: boolean;
+}
+
 export const AnimatedTestimonials = ({
   testimonials,
   autoplay = false,
-}: {
-  testimonials: Testimonial[];
-  autoplay?: boolean;
-}) => {
-  const [active, setActive] = useState(0);
+}: AnimatedTestimonialsProps): JSX.Element => {
+  const [active, setActive] = useState<number>(0);
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     setActive((prev) => (prev + 1) % testimonials.length);
-  };
+  }, [testimonials.length]);
 
-  const handlePrev = () => {
+  const handlePrev = useCallback(() => {
     setActive((prev) => (prev - 1 + testimonials.length) % testimonials.length);
-  };
+  }, [testimonials.length]);
 
   useEffect(() => {
     if (autoplay) {
       const interval = setInterval(handleNext, 5000);
       return () => clearInterval(interval);
     }
-  }, [autoplay]);
+  }, [autoplay, handleNext]);
 
-  const randomRotateY = () => Math.floor(Math.random() * 21) - 10;
+  // 💡 Fix hydration mismatch: memoize random rotations only on the client
+  const isClient = typeof window !== "undefined";
+  const randomRotations = useMemo(
+    () => testimonials.map(() => (isClient ? Math.floor(Math.random() * 21) - 10 : 0)),
+    [testimonials.length, isClient]
+  );
 
   return (
     <div className="mx-auto max-w-sm px-4 py-20 font-sans antialiased md:max-w-4xl md:px-8 lg:px-12">
@@ -52,23 +59,21 @@ export const AnimatedTestimonials = ({
                     opacity: 0,
                     scale: 0.9,
                     z: -100,
-                    rotate: randomRotateY(),
+                    rotate: randomRotations[index],
                   }}
                   animate={{
                     opacity: index === active ? 1 : 0.7,
                     scale: index === active ? 1 : 0.95,
                     z: index === active ? 0 : -100,
-                    rotate: index === active ? 0 : randomRotateY(),
-                    zIndex: index === active
-                      ? 40
-                      : testimonials.length + 2 - index,
+                    rotate: index === active ? 0 : randomRotations[index],
+                    zIndex: index === active ? 40 : testimonials.length + 2 - index,
                     y: index === active ? [0, -80, 0] : 0,
                   }}
                   exit={{
                     opacity: 0,
                     scale: 0.9,
                     z: 100,
-                    rotate: randomRotateY(),
+                    rotate: randomRotations[index],
                   }}
                   transition={{
                     duration: 0.4,
@@ -82,7 +87,7 @@ export const AnimatedTestimonials = ({
                       alt={testimonial.name}
                       fill
                       className="object-cover object-center"
-                      priority={index === active} // load active image faster
+                      priority={index === active}
                     />
                   </div>
                 </motion.div>
