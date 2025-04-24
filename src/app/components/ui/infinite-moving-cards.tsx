@@ -3,6 +3,7 @@
 import { cn } from "@/app/lib/utils";
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import Image from "next/image";
+import type { JSX } from "react";
 
 type InfiniteMovingCardsProps = {
   items: {
