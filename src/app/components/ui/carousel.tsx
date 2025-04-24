@@ -22,7 +22,7 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
   const slideRef = useRef<HTMLLIElement>(null);
   const xRef = useRef(0);
   const yRef = useRef(0);
-  const frameRef = useRef<number | null>(null); // ✅ Fixed
+  const frameRef = useRef<number | null>(null); // ✅ Fixed type
 
   useEffect(() => {
     const animate = () => {
@@ -31,8 +31,14 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
       slideRef.current.style.setProperty("--y", `${yRef.current}px`);
       frameRef.current = requestAnimationFrame(animate);
     };
+
     frameRef.current = requestAnimationFrame(animate);
-    return () => frameRef.current && cancelAnimationFrame(frameRef.current);
+
+    return () => {
+      if (frameRef.current !== null) {
+        cancelAnimationFrame(frameRef.current);
+      }
+    };
   }, []);
 
   const handleMouseMove = (e: React.MouseEvent) => {
