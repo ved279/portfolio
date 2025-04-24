@@ -4,6 +4,7 @@ import { IconArrowLeft, IconArrowRight } from "@tabler/icons-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
+import type { JSX } from "react";
 
 type Testimonial = {
   quote: string;
@@ -38,11 +39,11 @@ export const AnimatedTestimonials = ({
     }
   }, [autoplay, handleNext]);
 
-  // 💡 Fix hydration mismatch: memoize random rotations only on the client
+  // ✅ Hydration-safe rotation values using useMemo with proper deps
   const isClient = typeof window !== "undefined";
   const randomRotations = useMemo(
     () => testimonials.map(() => (isClient ? Math.floor(Math.random() * 21) - 10 : 0)),
-    [testimonials.length, isClient]
+    [testimonials, isClient] // ✅ Correct deps
   );
 
   return (

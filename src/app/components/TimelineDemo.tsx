@@ -1,6 +1,8 @@
 "use client";
 
 import React from "react";
+import type { JSX } from "react";
+
 import { Timeline } from "@/app/components/ui/timeline";
 
 export function TimelineDemo(): JSX.Element {

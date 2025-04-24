@@ -3,6 +3,8 @@
 import { cn } from "@/app/lib/utils";
 import { motion, stagger, useAnimate, useInView } from "motion/react";
 import { useEffect } from "react";
+import type { JSX } from "react";
+
 
 type WordType = {
   text: string;
