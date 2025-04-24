@@ -236,7 +236,7 @@ export const NavbarLogo = () => {
       className="relative z-20 mr-4 flex items-center space-x-2 px-2 py-1 text-medium font-normal text-black"
     >
       Vedant
-      <span className="font-medium text-grey dark:text-white p-3">   /CSE Grad</span>
+      <span className="font-medium text-grey dark:text-white p-3">   /B.Tech Undergraduate</span>
     </h1>
   );
 };
