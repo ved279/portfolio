@@ -4,6 +4,7 @@
 import * as React from "react";
 import { cn } from "@/app/lib/utils";
 import { useMotionTemplate, useMotionValue, motion } from "motion/react";
+import type { JSX } from "react";
 
 export type InputProps = React.InputHTMLAttributes<HTMLInputElement>;
 
